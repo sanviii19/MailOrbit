@@ -16,6 +16,7 @@ import authRoutes from './routes/auth.routes';
 import senderRoutes from './routes/sender.routes';
 import campaignRoutes from './routes/campaign.routes';
 import emailRoutes from './routes/email.routes';
+import healthRoutes from './routes/health.routes';
 import path from 'path';
 
 // Error handler (must import after routes)
@@ -67,14 +68,8 @@ app.use('/api/emails', emailRoutes);
 // Static uploads directory for attachments
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
-// Health check
-app.get('/health', (_req, res) => {
-  res.json({
-    status: 'ok',
-    timestamp: new Date().toISOString(),
-    env: env.NODE_ENV,
-  });
-});
+// Health checks
+app.use('/health', healthRoutes);
 
 // 404 handler
 app.use((_req, res) => {
