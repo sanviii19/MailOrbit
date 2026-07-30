@@ -15,7 +15,7 @@ const Compose = () => {
     hourlyLimit: 0,
     body: '',
   });
-  const [emails, setEmails] = useState<string[]>(['sanvikumari19@gmail.com']);
+  const [emails, setEmails] = useState<string[]>([]);
   const [csvFile, setCsvFile] = useState<File | null>(null);
   const [csvEmailCount, setCsvEmailCount] = useState<number | null>(null);
   const [attachments, setAttachments] = useState<File[]>([]);
