@@ -1,15 +1,12 @@
 {
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "https://email-job-scheduler-6bu5.onrender.com/api/$1",
-      "headers": {
-        "Access-Control-Allow-Credentials": "true"
-      }
+      "source": "/api/(.*)",
+      "destination": "https://email-job-scheduler-6bu5.onrender.com/api/$1"
     },
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
