@@ -16,7 +16,7 @@ router.get('/me', authenticate, authController.me);
 // Step 1: Redirect to Google
 router.get(
   '/google',
-  passport.authenticate('google', { session: false, scope: ['profile', 'email'] }),
+  passport.authenticate('google', { session: false, scope: ['profile', 'email'], prompt: 'select_account' }),
 );
 
 // Step 2: Google redirects back here — Passport verifies and calls googleCallback
