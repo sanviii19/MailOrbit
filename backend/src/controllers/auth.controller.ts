@@ -43,17 +43,23 @@ const REFRESH_COOKIE = 'refresh_token';
 const COOKIE_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000; // 7d
 
 function setRefreshCookie(res: Response, token: string): void {
+  const isProd = process.env['NODE_ENV'] === 'production';
   res.cookie(REFRESH_COOKIE, token, {
     httpOnly: true,
-    secure: process.env['NODE_ENV'] === 'production',
-    sameSite: 'strict',
+    secure: isProd, // Must be true when sameSite is 'none'
+    sameSite: isProd ? 'none' : 'lax', // 'none' required for cross-site (Vercel <-> Render)
     maxAge: COOKIE_MAX_AGE_MS,
     path: '/api/auth',
   });
 }
 
 function clearRefreshCookie(res: Response): void {
-  res.clearCookie(REFRESH_COOKIE, { path: '/api/auth' });
+  const isProd = process.env['NODE_ENV'] === 'production';
+  res.clearCookie(REFRESH_COOKIE, {
+    path: '/api/auth',
+    secure: isProd,
+    sameSite: isProd ? 'none' : 'lax',
+  });
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
