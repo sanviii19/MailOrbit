@@ -7,6 +7,7 @@
     "dev": "ts-node-dev --respawn --transpile-only --exit-child src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
+    "start:prod": "npm run migrate && node dist/index.js",
     "migrate": "node -r ts-node/register -r dotenv/config ./node_modules/knex/bin/cli.js --knexfile knexfile.ts migrate:latest",
     "migrate:rollback": "node -r ts-node/register -r dotenv/config ./node_modules/knex/bin/cli.js --knexfile knexfile.ts migrate:rollback",
     "migrate:make": "node -r ts-node/register -r dotenv/config ./node_modules/knex/bin/cli.js --knexfile knexfile.ts migrate:make",
@@ -31,7 +32,9 @@
     "passport-google-oauth20": "^2.0.0",
     "pg": "^8.11.5",
     "uuid": "^9.0.1",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
@@ -46,9 +49,7 @@
     "@types/passport-google-oauth20": "^2.0.14",
     "@types/pg": "^8.11.5",
     "@types/uuid": "^9.0.8",
-    "ts-node": "^10.9.2",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.4.5"
+    "ts-node-dev": "^2.0.0"
   },
   "engines": {
     "node": ">=20.0.0"
