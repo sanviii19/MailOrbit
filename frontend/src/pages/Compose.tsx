@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Paperclip, Clock, Upload, Calendar, X } from 'lucide-react';
+import { ArrowLeft, Paperclip, Clock, Upload, Calendar } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { api } from '../services/api';
+import { Button } from '../components/ui/Button';
 
 const Compose = () => {
   const navigate = useNavigate();
@@ -57,19 +59,19 @@ const Compose = () => {
 
   const handleSend = async (isScheduled: boolean = false) => {
     if (!formData.subject.trim()) {
-      alert('Please enter a subject.');
+      toast.error('Please enter a subject.');
       return;
     }
     
     // Strip HTML tags to check if the body is actually empty
     const plainTextBody = formData.body.replace(/<[^>]*>?/gm, '').trim();
     if (!plainTextBody) {
-      alert('Please enter a message body.');
+      toast.error('Please enter a message body.');
       return;
     }
 
     if (emails.length === 0 && !csvFile) {
-      alert('Please add at least one recipient or upload a CSV file.');
+      toast.error('Please add at least one recipient or upload a CSV file.');
       return;
     }
 
@@ -100,10 +102,11 @@ const Compose = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
+      toast.success('Campaign scheduled successfully!');
       navigate('/');
     } catch (err) {
       console.error('Failed to create campaign', err);
-      alert('Failed to schedule campaign');
+      toast.error('Failed to schedule campaign');
     }
   };
 
@@ -198,26 +201,23 @@ const Compose = () => {
                 >
                   Cancel
                 </button>
-                <button 
+                <Button 
                   onClick={() => {
                     setShowScheduleModal(false);
                     if (scheduledDate) handleSend(true);
                   }}
                   disabled={!scheduledDate}
-                  className="px-6 py-1.5 text-[13px] font-medium text-green-600 border border-green-500 rounded-full hover:bg-green-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  variant="outline"
                 >
                   Done
-                </button>
+                </Button>
               </div>
             </div>
           )}
           
-          <button 
-            onClick={() => handleSend(false)}
-            className="px-6 py-2 rounded-full border border-green-500 text-green-600 font-medium hover:bg-green-50 transition-colors"
-          >
+          <Button onClick={() => handleSend(false)}>
             Send
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -239,23 +239,24 @@ const Compose = () => {
                 ))}
               </select>
               
-              <button 
+              <Button 
                 type="button"
+                variant="ghost"
                 onClick={async () => {
                   try {
                     const res = await api.post('/senders', { name: 'Test Sender ' + Math.floor(Math.random() * 1000) });
                     const newSender = res.data.data.sender;
                     setSenders(prev => [...prev, newSender]);
                     setFormData(prev => ({ ...prev, senderId: newSender.id }));
+                    toast.success('Test sender auto-generated!');
                   } catch (err) {
                     console.error('Failed to create test sender', err);
-                    alert('Failed to create test sender');
+                    toast.error('Failed to create test sender');
                   }
                 }}
-                className="px-3 py-1.5 text-xs font-medium bg-green-50 text-green-700 hover:bg-green-100 rounded-md transition-colors border border-green-200"
               >
                 + Auto-Generate Test Sender
-              </button>
+              </Button>
             </div>
           </div>
 

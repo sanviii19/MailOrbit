@@ -6,6 +6,8 @@ import AuthCallback from './pages/AuthCallback';
 import DashboardLayout from './components/layout/DashboardLayout';
 import Dashboard from './pages/Dashboard';
 import Compose from './pages/Compose';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   const { user, loading } = useAuth();
@@ -54,6 +56,7 @@ function App() {
             }
           />
         </Routes>
+        <ToastContainer position="bottom-right" autoClose={3000} />
       </AuthProvider>
     </BrowserRouter>
   );
