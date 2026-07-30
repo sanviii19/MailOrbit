@@ -8,6 +8,10 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      - key: PORT
+        value: 4000
+      - key: DB_SSL
+        value: "true"
       - key: FRONTEND_URL
         sync: false
       - key: DATABASE_URL
@@ -16,9 +20,21 @@ services:
         sync: false
       - key: JWT_SECRET
         generateValue: true
+      - key: JWT_ACCESS_EXPIRES_IN
+        value: 15m
+      - key: JWT_REFRESH_EXPIRES_IN
+        value: 7d
       - key: GOOGLE_CLIENT_ID
         sync: false
       - key: GOOGLE_CLIENT_SECRET
         sync: false
       - key: GOOGLE_CALLBACK_URL
         sync: false
+      - key: WORKER_CONCURRENCY
+        value: "5"
+      - key: RATE_LIMITER_MAX
+        value: "1"
+      - key: RATE_LIMITER_DURATION_MS
+        value: "2000"
+      - key: MAX_EMAILS_PER_HOUR_PER_SENDER
+        value: "200"
