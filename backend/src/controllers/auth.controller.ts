@@ -49,14 +49,14 @@ function setRefreshCookie(res: Response, token: string): void {
     secure: isProd, // Must be true when sameSite is 'none'
     sameSite: isProd ? 'none' : 'lax', // 'none' required for cross-site (Vercel <-> Render)
     maxAge: COOKIE_MAX_AGE_MS,
-    path: '/api/auth',
+    path: '/', // Send cookie with ALL requests, not just /api/auth
   });
 }
 
 function clearRefreshCookie(res: Response): void {
   const isProd = process.env['NODE_ENV'] === 'production';
   res.clearCookie(REFRESH_COOKIE, {
-    path: '/api/auth',
+    path: '/', // Must match the path used in setRefreshCookie
     secure: isProd,
     sameSite: isProd ? 'none' : 'lax',
   });
