@@ -102,9 +102,9 @@ export async function createCampaign(
 
     const body = createCampaignSchema.parse(req.body);
 
-    // Merge: CSV file takes precedence if both provided
-    if (recipients.length === 0 && body.recipients && body.recipients.length > 0) {
-      recipients = body.recipients;
+    // Merge: combine CSV recipients and manually entered recipients
+    if (body.recipients && body.recipients.length > 0) {
+      recipients = [...new Set([...recipients, ...body.recipients])];
     }
 
     if (recipients.length === 0) {

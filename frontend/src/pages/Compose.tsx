@@ -15,6 +15,7 @@ const Compose = () => {
   });
   const [emails, setEmails] = useState<string[]>(['sanvikumari19@gmail.com']);
   const [csvFile, setCsvFile] = useState<File | null>(null);
+  const [csvEmailCount, setCsvEmailCount] = useState<number | null>(null);
   const [attachments, setAttachments] = useState<File[]>([]);
   
   // Modal state
@@ -49,7 +50,7 @@ const Compose = () => {
       const text = event.target?.result as string;
       // Rough extraction for preview
       const extracted = text.split(/[\s,;]+/).filter(e => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e));
-      setEmails([...new Set(extracted)]);
+      setCsvEmailCount(new Set(extracted).size);
     };
     reader.readAsText(file);
   };
@@ -308,11 +309,29 @@ const Compose = () => {
                     }}
                   />
                 </div>
-                <label className="flex items-center gap-2 text-sm text-green-600 font-medium cursor-pointer hover:text-green-700 whitespace-nowrap mt-2">
-                  <Upload className="w-4 h-4" />
-                  Upload CSV
-                  <input type="file" accept=".csv,.txt" className="hidden" onChange={handleFileUpload} />
-                </label>
+                <div className="flex flex-col gap-2 mt-1">
+                  <label className="flex items-center gap-2 text-sm text-green-600 font-medium cursor-pointer hover:text-green-700 whitespace-nowrap">
+                    <Upload className="w-4 h-4" />
+                    Upload CSV
+                    <input type="file" accept=".csv,.txt" className="hidden" onChange={handleFileUpload} />
+                  </label>
+                  {csvFile && csvEmailCount !== null && (
+                    <div className="flex flex-col text-xs text-gray-500 bg-gray-50 px-3 py-2 rounded-md border border-gray-100">
+                      <span className="font-medium text-gray-700 truncate max-w-[200px]">{csvFile.name}</span>
+                      <span>{csvEmailCount} emails detected</span>
+                      <button 
+                        type="button" 
+                        onClick={() => {
+                          setCsvFile(null);
+                          setCsvEmailCount(null);
+                        }}
+                        className="text-red-500 hover:text-red-700 mt-1 text-left"
+                      >
+                        Remove file
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
