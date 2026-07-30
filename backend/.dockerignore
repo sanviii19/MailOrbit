@@ -1,0 +1,28 @@
+# Dependencies
+node_modules
+npm-debug.log*
+
+# TypeScript build output (built inside Docker)
+dist
+
+# Local environment files — NEVER ship secrets into the image
+.env
+.env.*
+
+# Test / dev files
+test-email.ts
+coverage
+
+# Git
+.git
+.gitignore
+
+# Editor
+.vscode
+.DS_Store
+
+# Uploaded files (runtime volume, not baked into image)
+uploads
+
+# Frontend — not needed in backend image (monorepo)
+../frontend

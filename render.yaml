@@ -1,10 +1,11 @@
 services:
   - type: web
     name: email-scheduler-backend
-    env: node
-    rootDir: backend
-    buildCommand: npm install --include=dev && npm run build
-    startCommand: npm run start:prod
+    runtime: docker
+    # Monorepo: Dockerfile lives inside backend/ folder
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /health
     envVars:
       - key: NODE_ENV
         value: production
