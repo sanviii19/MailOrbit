@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
-import { api, setAccessToken, getAccessToken } from '../services/api';
+import { api, setAccessToken } from '../services/api';
 
 interface User {
   id: string;
