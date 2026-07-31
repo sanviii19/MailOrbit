@@ -161,8 +161,13 @@ const Dashboard = ({ type }: DashboardProps) => {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {selectedEmail.campaign_attachments.map((att: any, idx: number) => {
                   const filename = att.path ? att.path.split(/[\\/]/).pop() : att.filename;
+                  // In production, Vercel proxies /uploads/* to the backend.
+                  // In local dev, hit the backend directly.
+                  const isProd = import.meta.env.PROD;
                   const backendBaseUrl = (import.meta.env.VITE_API_URL || 'http://localhost:4000/api').replace('/api', '');
-                  const downloadUrl = `${backendBaseUrl}/uploads/${encodeURIComponent(filename)}`;
+                  const downloadUrl = isProd
+                    ? `/uploads/${encodeURIComponent(filename)}`
+                    : `${backendBaseUrl}/uploads/${encodeURIComponent(filename)}`;
                   const isImage = /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(filename);
 
                   if (isImage) {
