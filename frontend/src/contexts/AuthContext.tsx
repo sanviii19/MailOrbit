@@ -34,28 +34,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
-    // Check if we already have an access token (e.g. page reload)
-    // Actually, on reload, the token is in memory and lost.
-    // We should attempt to refresh silently on mount.
-    const attemptSilentRefresh = async () => {
-      try {
-        const res = await api.post('/auth/refresh');
-        if (res.data?.data?.accessToken) {
-          setAccessToken(res.data.data.accessToken);
-          await fetchUser();
-        } else {
-          setLoading(false);
-        }
-      } catch (err) {
-        setLoading(false);
-      }
-    };
-
-    if (!getAccessToken()) {
-      attemptSilentRefresh();
-    } else {
-      fetchUser();
-    }
+    // If there is no access token, fetchUser will hit /auth/me and receive a 401.
+    // The interceptor in api.ts will catch the 401, refresh the token, and retry the request automatically.
+    // This prevents StrictMode from firing two concurrent refresh requests.
+    fetchUser();
 
     // Listen for unauthorized events to clear state
     const handleUnauthorized = () => {

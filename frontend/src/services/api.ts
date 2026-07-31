@@ -25,6 +25,9 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// Global lock for token refresh to prevent concurrent requests
+let refreshPromise: Promise<string | null> | null = null;
+
 // Response Interceptor: Handle 401 Unauthorized for token refresh
 api.interceptors.response.use(
   (response) => response,
@@ -41,26 +44,34 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        // Attempt to refresh the token using the httpOnly cookie
-        const res = await axios.post(
-          `${API_URL}/auth/refresh`,
-          {},
-          { withCredentials: true }
-        );
+        if (!refreshPromise) {
+          refreshPromise = axios.post(
+            `${API_URL}/auth/refresh`,
+            {},
+            { withCredentials: true }
+          ).then(res => {
+            if (res.data?.data?.accessToken) {
+              setAccessToken(res.data.data.accessToken);
+              return res.data.data.accessToken;
+            }
+            return null;
+          }).catch(err => {
+            setAccessToken(null);
+            window.dispatchEvent(new Event('auth:unauthorized'));
+            throw err;
+          }).finally(() => {
+            refreshPromise = null;
+          });
+        }
 
-        if (res.data?.data?.accessToken) {
-          // Store the new token
-          setAccessToken(res.data.data.accessToken);
+        const newAccessToken = await refreshPromise;
 
+        if (newAccessToken) {
           // Update the failed request's header and retry
-          originalRequest.headers.Authorization = `Bearer ${res.data.data.accessToken}`;
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return api(originalRequest);
         }
       } catch (refreshError) {
-        // Refresh token is invalid/expired. Logout the user.
-        setAccessToken(null);
-        // Dispatch a custom event to notify the app to redirect to login
-        window.dispatchEvent(new Event('auth:unauthorized'));
         return Promise.reject(refreshError);
       }
     }
