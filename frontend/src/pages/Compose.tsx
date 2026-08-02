@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, Paperclip, Clock, Upload, Calendar } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -23,6 +23,9 @@ const Compose = () => {
   // Modal state
   const [showScheduleModal, setShowScheduleModal] = useState(false);
   const [scheduledDate, setScheduledDate] = useState<Date | null>(null);
+
+  // Generate a unique idempotency key for this compose session
+  const idempotencyKeyRef = useRef(crypto.randomUUID());
 
   useEffect(() => {
     // Fetch senders to populate the "From" dropdown
@@ -81,6 +84,7 @@ const Compose = () => {
     formPayload.append('body', formData.body);
     formPayload.append('delayBetweenEmailsMs', formData.delay.toString());
     formPayload.append('hourlyLimit', formData.hourlyLimit.toString());
+    formPayload.append('idempotencyKey', idempotencyKeyRef.current);
     
     // Set scheduled time, default to now
     const startTime = isScheduled && scheduledDate ? scheduledDate.toISOString() : new Date().toISOString();
