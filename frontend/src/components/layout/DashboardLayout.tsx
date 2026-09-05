@@ -24,7 +24,7 @@ const DashboardLayout = () => {
       }
     };
     fetchStats();
-    
+
     // Auto refresh stats every 10 seconds
     const interval = setInterval(fetchStats, 10000);
     return () => clearInterval(interval);
@@ -41,13 +41,13 @@ const DashboardLayout = () => {
       <aside className="w-[280px] border-r border-gray-200 flex flex-col bg-white">
         {/* Logo */}
         <div className="p-6">
-          <div className="text-3xl font-black tracking-tighter text-gray-900">ONG</div>
+          <div className="text-3xl font-black tracking-tighter text-gray-900">MailOrbit</div>
         </div>
 
         {/* User Profile */}
         <div className="px-6 mb-6">
           <div className="relative">
-            <button 
+            <button
               onClick={() => setShowDropdown(!showDropdown)}
               className="w-full flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors text-left"
             >
@@ -64,10 +64,10 @@ const DashboardLayout = () => {
               </div>
               <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${showDropdown ? 'rotate-180' : ''}`} />
             </button>
-            
+
             {showDropdown && (
               <>
-                <div 
+                <div
                   className="fixed inset-0 z-10"
                   onClick={() => setShowDropdown(false)}
                 />
@@ -98,13 +98,12 @@ const DashboardLayout = () => {
         {/* Navigation */}
         <nav className="flex-1 px-4">
           <div className="text-xs font-semibold text-gray-400 mb-2 px-2">CORE</div>
-          
+
           <NavLink
             to="/"
             end
             className={({ isActive }) =>
-              `flex items-center justify-between px-3 py-2.5 rounded-lg text-sm mb-1 transition-colors ${
-                isActive ? 'bg-green-50 text-gray-900 font-medium' : 'text-gray-600 hover:bg-gray-50'
+              `flex items-center justify-between px-3 py-2.5 rounded-lg text-sm mb-1 transition-colors ${isActive ? 'bg-green-50 text-gray-900 font-medium' : 'text-gray-600 hover:bg-gray-50'
               }`
             }
           >
@@ -118,8 +117,7 @@ const DashboardLayout = () => {
           <NavLink
             to="/sent"
             className={({ isActive }) =>
-              `flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors ${
-                isActive ? 'bg-green-50 text-gray-900 font-medium' : 'text-gray-600 hover:bg-gray-50'
+              `flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors ${isActive ? 'bg-green-50 text-gray-900 font-medium' : 'text-gray-600 hover:bg-gray-50'
               }`
             }
           >
