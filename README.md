@@ -1,4 +1,4 @@
-# Email Job Scheduler
+# MailOrbit
 
 Production-grade full-stack email scheduling service built with **Express + TypeScript + BullMQ + Redis + PostgreSQL** (Backend) and **React + Vite** (Frontend).
 
